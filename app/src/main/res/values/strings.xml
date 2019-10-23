@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SportDbGITS</string>
+    <string name="label_football_club">Football Club</string>
+    <string name="label_favorite">Favorite</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_english_league">English Premier League</string>
+    <string name="label_message_empty_data">Ayo, cari Team favorit kamu</string>
+    <string name="message_success_to_delete">Berhasil Menghapus</string>
+    <string name="message_success_to_add">Berhasil Menambahkan</string>
+    <string name="message_failed">Gagal</string>
+</resources>
