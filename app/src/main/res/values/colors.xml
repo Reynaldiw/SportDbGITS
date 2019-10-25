@@ -6,4 +6,5 @@
     
     <color name="colorMaastrichtBlue">#081B33</color>
     <color name="colorDarkElectricBlue">#506680</color>
+    <color name="gray">#aaaaaa</color>
 </resources>

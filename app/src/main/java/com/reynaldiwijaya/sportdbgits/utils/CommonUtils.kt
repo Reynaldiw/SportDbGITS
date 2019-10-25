@@ -5,14 +5,20 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.reynaldiwijaya.sportdbgits.R
 import com.squareup.picasso.Picasso
 
 fun emptyString() = ""
 
-fun ImageView.loadImage(url : String) {
-    Picasso.get().load(url).into(this)
+fun ImageView.loadImage(url : String, context: Context) {
+    Picasso.get()
+        .load(url)
+        .placeholder(createCircularProgressDrawable(context))
+        .error(R.drawable.ic_broken_image)
+        .into(this)
+
 }
 
 fun View.gone() {
@@ -34,4 +40,13 @@ fun View.onClick(action : (view : View) -> Unit) {
 
 fun showMessage(view: View, message : String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+}
+
+fun createCircularProgressDrawable(context: Context) : CircularProgressDrawable {
+    val circularProgressDrawable = CircularProgressDrawable(context)
+    circularProgressDrawable.strokeWidth = 4f
+    circularProgressDrawable.centerRadius = 30f
+    circularProgressDrawable.start()
+
+    return circularProgressDrawable
 }

@@ -16,7 +16,7 @@ import com.reynaldiwijaya.sportdbgits.presentation.detail.DetailFootballClubActi
 import com.reynaldiwijaya.sportdbgits.presentation.viewmodel.*
 import com.reynaldiwijaya.sportdbgits.utils.*
 import kotlinx.android.synthetic.main.fragment_football_club.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FootballClubFragment : Fragment(), FootballClubAdapter.OnItemClick {
 
@@ -59,7 +59,7 @@ class FootballClubFragment : Fragment(), FootballClubAdapter.OnItemClick {
     }
 
     private fun initUI() {
-        setUpRecyclerView(mutableListOf())
+        setUpRecyclerView()
         when(state) {
             FootballListState.API.state -> {
                 viewModel.getTeamsApi(getString(R.string.label_english_league))
@@ -72,10 +72,10 @@ class FootballClubFragment : Fragment(), FootballClubAdapter.OnItemClick {
         }
     }
 
-    private fun setUpRecyclerView(datas : MutableList<Team>) {
+    private fun setUpRecyclerView() {
         rvTeam?.apply {
             layoutManager = LinearLayoutManager(activity)
-            footballClubAdapter = FootballClubAdapter(datas)
+            footballClubAdapter = FootballClubAdapter()
             footballClubAdapter.itemClicked(this@FootballClubFragment)
             adapter = footballClubAdapter
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
@@ -109,7 +109,7 @@ class FootballClubFragment : Fragment(), FootballClubAdapter.OnItemClick {
                     rvTeam.gone()
                 } else {
                     tvEmptyDatas.gone()
-                    footballClubAdapter.datas.addAll(state.teams)
+                    footballClubAdapter.setDatas(state.teams.toMutableList())
                 }
             }
         }

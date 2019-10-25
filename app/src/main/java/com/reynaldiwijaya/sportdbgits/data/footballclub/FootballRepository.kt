@@ -7,15 +7,15 @@ import io.reactivex.Single
 
 interface FootballRepository : BaseRepository {
 
-    fun getTeamsApi(league : String) : Single<List<TeamItem>>
+    suspend fun getTeamsApi(league : String) : List<TeamItem>
 
-    fun getTeamsDatabase() : Single<List<TeamItem>>
+    fun getTeamsDatabase() : List<TeamItem>
 
     fun insertTeamToDatabase(team : TeamItem)
 
     fun removeTeamFromDatabase(team: TeamItem)
 
-    fun getTeamById(id : Int) : Single<List<TeamItem>>
+    fun getTeamById(id : Int) : List<TeamItem>
 
     fun removeTeamById(id : Int)
 }

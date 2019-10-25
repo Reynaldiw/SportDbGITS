@@ -1,22 +1,25 @@
 package com.reynaldiwijaya.sportdbgits.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.reynaldiwijaya.sportdbgits.base.viewmodel.BaseViewModel
 import com.reynaldiwijaya.sportdbgits.domain.football.FootballUseCase
 import com.reynaldiwijaya.sportdbgits.domain.football.model.Team
-import com.reynaldiwijaya.sportdbgits.utils.singleScheduler
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 sealed class HomeScreenState
 object LoadingState : HomeScreenState()
 data class ErrorState(var msg : String?) : HomeScreenState()
 data class DatasLoadedState(var teams : List<Team>) : HomeScreenState()
 data class SuccessInsertOrRemoveInDatabase(val state : Boolean) : HomeScreenState()
+data class DataLoadedState(var team : Team) : HomeScreenState()
 
 class FootballClubViewModel(private val usecase : FootballUseCase) : BaseViewModel() {
 
@@ -24,76 +27,77 @@ class FootballClubViewModel(private val usecase : FootballUseCase) : BaseViewMod
 
     fun getTeamsApi(league : String) {
         stateView.value = LoadingState
-        disposable.add(
-        usecase.getTeamsApi(league)
-            .compose(singleScheduler())
-            .subscribe( { result ->
-                if (result.isNotEmpty()) {
-                    stateView.value = DatasLoadedState(result)
-                } else {
-                    Log.e("API", "Gagal")
-                }
-            }, this::onError))
+
+        viewModelScope.launch {
+            val teams = withContext(Dispatchers.IO) {
+                usecase.getTeamsApi(league)
+            }
+
+            try {
+                stateView.value = DatasLoadedState(teams)
+            } catch (e : Exception) {
+                stateView.value = ErrorState(e.message)
+            }
+        }
     }
 
     fun getTeamsFromDatabase() {
         stateView.value = LoadingState
-        disposable.add(
-            usecase.getTeamsFromDatabase()
-                .compose(singleScheduler())
-                .subscribe( {result ->
-                    stateView.value = DatasLoadedState(result)
-                }, this::onError)
-        )
+        viewModelScope.launch {
+            val teams = withContext(Dispatchers.IO) {
+                usecase.getTeamsFromDatabase()
+            }
+
+            try {
+                stateView.value = DatasLoadedState(teams)
+            } catch (e : Exception) {
+                stateView.value = ErrorState(e.message)
+            }
+        }
     }
 
     fun getTeamByIdFromDatabase(id : Int) {
         stateView.value = LoadingState
-        disposable.add(
-            usecase.getTeamById(id)
-                .compose(singleScheduler())
-                .subscribe({result ->
-                    stateView.value = DatasLoadedState(result)
-                }, this::onError)
-        )
+        viewModelScope.launch {
+            val team = withContext(Dispatchers.IO) {
+                usecase.getTeamById(id)
+            }
+
+            try {
+                stateView.value = DatasLoadedState(team)
+            } catch (e : Exception) {
+                stateView.value = ErrorState(e.message)
+            }
+        }
     }
 
     fun insertTeamToDatabase(team: Team) {
         stateView.value = LoadingState
-        Completable.fromAction{usecase.insertTeamToDatabase(team)}
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver{
-                override fun onComplete() {
-                    stateView.value = SuccessInsertOrRemoveInDatabase(true)
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    usecase.insertTeamToDatabase(team)
                 }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                    onError(e)
-                }
-            })
+                stateView.value = SuccessInsertOrRemoveInDatabase(true)
+            }catch (e : Exception) {
+                stateView.value = ErrorState(e.message)
+            }
+        }
     }
 
     fun removeTeamFromDatabase(team : Team) {
         stateView.value = LoadingState
-        Completable.fromAction{usecase.removeTeamFromDatabase(team)}
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver{
-                override fun onComplete() {
-                    stateView.value = SuccessInsertOrRemoveInDatabase(true)
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    usecase.removeTeamFromDatabase(team)
                 }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                    onError(e)
-                }
-            })
+                stateView.value = SuccessInsertOrRemoveInDatabase(true)
+                stateView.value = DataLoadedState(team.copy(teamFavorite = false))
+            }catch (e : Exception) {
+                stateView.value = ErrorState(e.message)
+            }
+        }
     }
 
     override fun onError(e: Throwable) {

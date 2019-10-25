@@ -3,7 +3,6 @@ package com.reynaldiwijaya.sportdbgits.presentation.detail
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import com.reynaldiwijaya.sportdbgits.R
 import com.reynaldiwijaya.sportdbgits.domain.football.model.Team
@@ -11,7 +10,7 @@ import com.reynaldiwijaya.sportdbgits.presentation.viewmodel.*
 import com.reynaldiwijaya.sportdbgits.utils.*
 import kotlinx.android.synthetic.main.activity_detail_football_club.*
 import org.jetbrains.anko.startActivity
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailFootballClubActivity : AppCompatActivity() {
 
@@ -57,7 +56,7 @@ class DetailFootballClubActivity : AppCompatActivity() {
         data?.let {
             tvTeamName.text = it.teamName
             tvTeamDesc.text = it.teamDesc
-            it.teamLogo?.let { it1 -> imgTeamLogo.loadImage(it1) }
+            it.teamLogo?.let { it1 -> imgTeamLogo.loadImage(it1, this) }
         }
         setUpFavorite(data)
     }
@@ -78,7 +77,7 @@ class DetailFootballClubActivity : AppCompatActivity() {
 
     private fun removeTeamFromDatabase(data : Team) {
         viewModel.apply {
-            removeTeamFromDatabase(Team(data.idTeam, data.teamName, data.teamLogo, data.teamDesc, false))
+            removeTeamFromDatabase(data)
             isInsertOrRemove = InsertOrRemoveState.REMOVE.value
             stateView.observe(this@DetailFootballClubActivity, stateObserverFavorite)
         }
@@ -100,14 +99,15 @@ class DetailFootballClubActivity : AppCompatActivity() {
                 when(isInsertOrRemove) {
                     InsertOrRemoveState.REMOVE.value -> {
                         showMessage(nsvDetailClub, getString(R.string.message_success_to_delete))
-                        btnFavorite.setFavoriteImage(this, false)
+                        initUi()
                     }
                     InsertOrRemoveState.INSERT.value -> {
                         showMessage(nsvDetailClub, getString(R.string.message_success_to_add))
-                        btnFavorite.setFavoriteImage(this, true)
+                        initUi()
                     }
                 }
             }
+            is DataLoadedState -> data = state.team
         }
     }
 }

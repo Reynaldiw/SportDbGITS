@@ -6,7 +6,7 @@ import com.reynaldiwijaya.sportdbgits.data.footballclub.remote.FootballApi
 import com.reynaldiwijaya.sportdbgits.domain.football.FootballInteractor
 import com.reynaldiwijaya.sportdbgits.domain.football.FootballUseCase
 import com.reynaldiwijaya.sportdbgits.presentation.viewmodel.FootballClubViewModel
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val teamModule = module {

@@ -5,15 +5,15 @@ import io.reactivex.Single
 
 interface FootballUseCase {
 
-    fun getTeamsApi(league : String) : Single<List<Team>>
+    suspend fun getTeamsApi(league : String) : List<Team>
 
-    fun getTeamsFromDatabase() : Single<List<Team>>
+    fun getTeamsFromDatabase() : List<Team>
 
     fun insertTeamToDatabase(team: Team)
 
     fun removeTeamFromDatabase(team: Team)
 
-    fun getTeamById(id : Int) : Single<List<Team>>
+    fun getTeamById(id : Int) : List<Team>
 
     fun removeTeamById(id : Int)
 }

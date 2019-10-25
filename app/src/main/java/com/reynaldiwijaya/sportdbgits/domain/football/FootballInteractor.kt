@@ -6,16 +6,12 @@ import io.reactivex.Single
 
 class FootballInteractor(private val repository: FootballRepository) : FootballUseCase {
 
-    override fun getTeamsApi(league : String): Single<List<Team>> {
-        return repository.getTeamsApi(league).map { it.map { teamItem ->
-            teamItem.toTeam()
-        } }
+    override suspend fun getTeamsApi(league : String): List<Team> {
+        return repository.getTeamsApi(league).map { it.toTeam() }
     }
 
-    override fun getTeamsFromDatabase(): Single<List<Team>> {
-        return repository.getTeamsDatabase().map { it.map { teamItem ->
-            teamItem.toTeam()
-        } }
+    override fun getTeamsFromDatabase(): List<Team> {
+        return repository.getTeamsDatabase().map { it.toTeam() }
     }
 
     override fun insertTeamToDatabase(team: Team) {
@@ -26,8 +22,8 @@ class FootballInteractor(private val repository: FootballRepository) : FootballU
         repository.removeTeamFromDatabase(team.toTeamItem())
     }
 
-    override fun getTeamById(id: Int): Single<List<Team>> {
-        return repository.getTeamById(id).map { it.map { it.toTeam() } }
+    override fun getTeamById(id: Int): List<Team> {
+        return repository.getTeamById(id).map { it.toTeam() }
     }
 
     override fun removeTeamById(id: Int) {

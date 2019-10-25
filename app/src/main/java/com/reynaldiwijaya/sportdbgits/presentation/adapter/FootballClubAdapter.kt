@@ -9,9 +9,17 @@ import com.reynaldiwijaya.sportdbgits.domain.football.model.Team
 import com.reynaldiwijaya.sportdbgits.utils.loadImage
 import kotlinx.android.synthetic.main.item_team.view.*
 
-class FootballClubAdapter(var datas : MutableList<Team>) : RecyclerView.Adapter<FootballClubAdapter.ViewHolder>() {
+class FootballClubAdapter : RecyclerView.Adapter<FootballClubAdapter.ViewHolder>() {
 
     private lateinit var onItemClick : OnItemClick
+
+    private val datas : MutableList<Team> = mutableListOf()
+
+    fun setDatas(teams : MutableList<Team>) {
+        this.datas.clear()
+        this.datas.addAll(teams)
+        notifyDataSetChanged()
+    }
 
     fun itemClicked(onItemClick: OnItemClick) {
         this.onItemClick = onItemClick
@@ -37,7 +45,7 @@ class FootballClubAdapter(var datas : MutableList<Team>) : RecyclerView.Adapter<
             with(itemView) {
                 team.let {
                     tvTeamName.text = it.teamName
-                    it.teamLogo?.let { it1 -> imgTeamLogo.loadImage(it1) }
+                    it.teamLogo?.let { it1 -> imgTeamLogo.loadImage(it1, itemView.context) }
                 }
             }
             itemView.setOnClickListener {

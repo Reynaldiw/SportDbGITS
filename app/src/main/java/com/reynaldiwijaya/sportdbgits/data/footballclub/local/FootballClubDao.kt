@@ -10,10 +10,10 @@ import io.reactivex.Single
 abstract class FootballClubDao : RxLocalDb<TeamItem> {
 
     @Query("SELECT * FROM team")
-    abstract override fun getAllTeams(): Single<List<TeamItem>>
+    abstract override fun getAllTeams(): List<TeamItem>
 
     @Query("SELECT * FROM team WHERE idTeam == :id")
-    abstract override fun getTeamById(id: Int): Single<List<TeamItem>>
+    abstract override fun getTeamById(id: Int): List<TeamItem>
 
     @Query("DELETE FROM team WHERE idTeam == :id")
     abstract override fun removeTeamById(id: Int)

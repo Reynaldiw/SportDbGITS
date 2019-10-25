@@ -10,5 +10,5 @@ import retrofit2.http.Query
 interface FootballApiClient {
 
     @GET("v1/json/1/search_all_teams.php")
-    fun getTeams(@Query("l") league : String) : Single<Response<TeamResponseItem<List<TeamItem>>>>
+    suspend fun getTeams(@Query("l") league : String) : TeamResponseItem<List<TeamItem>>
 }

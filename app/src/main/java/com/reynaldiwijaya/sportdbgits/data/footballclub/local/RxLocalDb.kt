@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import com.reynaldiwijaya.sportdbgits.base.repository.LocalDb
 import com.reynaldiwijaya.sportdbgits.data.footballclub.model.Model
+import com.reynaldiwijaya.sportdbgits.data.footballclub.model.TeamItem
 import com.reynaldiwijaya.sportdbgits.domain.football.model.Team
 import io.reactivex.Single
 
@@ -20,9 +21,9 @@ interface RxLocalDb<T : Model> : LocalDb {
 
     // Basic functions, no need to override
 
-    fun getAllTeams() : Single<List<T>>
+    fun getAllTeams() : List<TeamItem>
 
-    fun getTeamById(id : Int) : Single<List<T>>
+    fun getTeamById(id : Int) : List<T>
 
     fun removeTeamById(id : Int)
 

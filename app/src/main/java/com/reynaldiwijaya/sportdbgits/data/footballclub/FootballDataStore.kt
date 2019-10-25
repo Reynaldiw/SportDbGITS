@@ -14,12 +14,11 @@ class FootballDataStore(
     override val localDb = dao
 
 
-    override fun getTeamsApi(league : String): Single<List<TeamItem>> {
-        return webService.getTeams(league)
-            .map { it.body()?.datas }
+    override suspend fun getTeamsApi(league : String): List<TeamItem>{
+        return webService.getTeams(league).datas ?: listOf()
     }
 
-    override fun getTeamsDatabase(): Single<List<TeamItem>> {
+    override fun getTeamsDatabase(): List<TeamItem> {
         return localDb.getAllTeams()
     }
 
@@ -31,7 +30,7 @@ class FootballDataStore(
         localDb.remove(team)
     }
 
-    override fun getTeamById(id : Int): Single<List<TeamItem>> {
+    override fun getTeamById(id : Int): List<TeamItem> {
         return localDb.getTeamById(id)
     }
 
