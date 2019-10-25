@@ -9,13 +9,13 @@ interface FootballRepository : BaseRepository {
 
     suspend fun getTeamsApi(league : String) : List<TeamItem>
 
-    fun getTeamsDatabase() : List<TeamItem>
+    suspend fun getTeamsDatabase() : List<TeamItem>
 
-    fun insertTeamToDatabase(team : TeamItem)
+    suspend fun insertTeamToDatabase(team : TeamItem)
 
-    fun removeTeamFromDatabase(team: TeamItem)
+    suspend fun removeTeamFromDatabase(team: TeamItem)
 
-    fun getTeamById(id : Int) : List<TeamItem>
+    suspend fun getTeamById(id : Int) : List<TeamItem>
 
-    fun removeTeamById(id : Int)
+    suspend fun removeTeamById(id : Int)
 }

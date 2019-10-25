@@ -2,7 +2,6 @@ package com.reynaldiwijaya.sportdbgits.domain.football
 
 import com.reynaldiwijaya.sportdbgits.data.footballclub.FootballRepository
 import com.reynaldiwijaya.sportdbgits.domain.football.model.Team
-import io.reactivex.Single
 
 class FootballInteractor(private val repository: FootballRepository) : FootballUseCase {
 
@@ -10,23 +9,23 @@ class FootballInteractor(private val repository: FootballRepository) : FootballU
         return repository.getTeamsApi(league).map { it.toTeam() }
     }
 
-    override fun getTeamsFromDatabase(): List<Team> {
+    override suspend fun getTeamsFromDatabase(): List<Team> {
         return repository.getTeamsDatabase().map { it.toTeam() }
     }
 
-    override fun insertTeamToDatabase(team: Team) {
+    override suspend fun insertTeamToDatabase(team: Team) {
         repository.insertTeamToDatabase(team.toTeamItem())
     }
 
-    override fun removeTeamFromDatabase(team: Team) {
+    override suspend fun removeTeamFromDatabase(team: Team) {
         repository.removeTeamFromDatabase(team.toTeamItem())
     }
 
-    override fun getTeamById(id: Int): List<Team> {
+    override suspend fun getTeamById(id: Int): List<Team> {
         return repository.getTeamById(id).map { it.toTeam() }
     }
 
-    override fun removeTeamById(id: Int) {
+    override suspend fun removeTeamById(id: Int) {
         repository.removeTeamById(id)
     }
 }

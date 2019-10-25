@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.reynaldiwijaya.sportdbgits.data.footballclub.local.FootballClubDao
 import com.reynaldiwijaya.sportdbgits.data.footballclub.model.TeamItem
 
-@Database(entities = [TeamItem::class], version = 1)
+@Database(entities = [TeamItem::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {

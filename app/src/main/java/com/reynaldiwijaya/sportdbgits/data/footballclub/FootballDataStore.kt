@@ -18,23 +18,23 @@ class FootballDataStore(
         return webService.getTeams(league).datas ?: listOf()
     }
 
-    override fun getTeamsDatabase(): List<TeamItem> {
+    override suspend fun getTeamsDatabase(): List<TeamItem> {
         return localDb.getAllTeams()
     }
 
-    override fun insertTeamToDatabase(team: TeamItem) {
+    override suspend fun insertTeamToDatabase(team: TeamItem) {
         localDb.insert(team)
     }
 
-    override fun removeTeamFromDatabase(team: TeamItem) {
+    override suspend fun removeTeamFromDatabase(team: TeamItem) {
         localDb.remove(team)
     }
 
-    override fun getTeamById(id : Int): List<TeamItem> {
+    override suspend fun getTeamById(id : Int): List<TeamItem> {
         return localDb.getTeamById(id)
     }
 
-    override fun removeTeamById(id: Int) {
+    override suspend fun removeTeamById(id: Int) {
         localDb.removeTeamById(id)
     }
 
